@@ -19,36 +19,58 @@ public class Configuration {
     private JsonNode jsonNode;
 
     /**
-     *jdbc mysql部分
+     * jdbc mysql部分
      */
     private String jdbc;
     private String url;
     private String username;
     private String password;
     /**
-     *  package部分
+     * package部分
      */
     private String model;
     private String dao;
     private String mapper;
 
     /**
-     *  table部分
+     * table部分
      */
     private List<String> tables;
-    public Configuration(){
+
+    public Configuration() {
 
     }
+
     public Configuration(File configurationFile) {
         try {
-            InputStream inputStream=new FileInputStream(configurationFile);
+            InputStream inputStream = new FileInputStream(configurationFile);
             YAMLParser yamlParser = yamlFactory.createParser(inputStream);
-            ObjectMapper objectMapper=new ObjectMapper();
-            jsonNode=objectMapper.readTree(yamlParser);
+            ObjectMapper objectMapper = new ObjectMapper();
+            jsonNode = objectMapper.readTree(yamlParser);
+            setDataBase(jsonNode.get("database"));
+            setPackage(jsonNode.get("package"));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+    private void setTables(JsonNode jsonNode){
+
+    }
+
+    private void setPackage(JsonNode jsonNode) {
+        setModel(jsonNode.get("model").asText());
+        setDao(jsonNode.get("dao").asText());
+        setMapper(jsonNode.get("mapper").asText());
+    }
+
+    private void setDataBase(JsonNode jsonNode) {
+        setJdbc(jsonNode.get("jdbc").asText());
+        setUrl(jsonNode.get("url").asText());
+        setUsername(jsonNode.get("username").asText());
+        setPassword(jsonNode.get("password").asText());
+
+    }
+
 
     public String getJdbc() {
         return jdbc;
