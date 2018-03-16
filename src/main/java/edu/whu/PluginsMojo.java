@@ -16,6 +16,8 @@ package edu.whu;
  * limitations under the License.
  */
 
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.whu.model.Configuration;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -44,6 +46,6 @@ public class PluginsMojo extends AbstractMojo {
 
     public void execute() throws MojoExecutionException {
         Configuration configuration=new Configuration(configurationFile);
-        getLog().info(configuration.getUrl());
+        getLog().info(JSON.toJSONString(configuration));
     }
 }

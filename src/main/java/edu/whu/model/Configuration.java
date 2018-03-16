@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
+import edu.whu.utils.ReflectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +12,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -24,6 +25,11 @@ public class Configuration {
     private YAMLFactory yamlFactory = new YAMLFactory();
     private JsonNode jsonNode;
 
+    /**
+     * package配置文件
+     */
+    private final static String[] PACKAGE_CONFIG = {"model", "dao", "mapper"};
+    private final static String[] TABLE_CONFIG = {"enableSelect", "enableInsert", "enableDelete", "enableUpdate"};
     /**
      * jdbc mysql部分
      */
@@ -75,13 +81,16 @@ public class Configuration {
         List<TableConfiguration> tableList = new ArrayList<>();
         for (int i = 0; i < nameArray.length; i++) {
             TableConfiguration table = new TableConfiguration();
-            logger.info("name={}", nameArray[i]);
             table.setName(nameArray[i]);
-
-            table.setEnableInsert(setOfNull(jsonNode, "enableInsert"));
-            table.setEnableDelete(setOfNull(jsonNode, "enableDelete"));
-            table.setEnableSelect(setOfNull(jsonNode, "enableSelect"));
-            table.setEnableSelect(setOfNull(jsonNode, "enableUpdate"));
+            for(String tmp:TABLE_CONFIG) {
+                try {
+                    ReflectUtils.invokeSetter(table, "set" +tmp.substring(0,1).toUpperCase()+
+                            tmp.substring(1),Boolean.class,setOfNull(jsonNode,tmp));
+                } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+            tableList.add(table);
         }
     }
 
@@ -99,10 +108,26 @@ public class Configuration {
         }
     }
 
+    private String setString(JsonNode jsonNode, String name) {
+        if (jsonNode == null) {
+            return null;
+        }
+        if (jsonNode.get(name) == null) {
+            return null;
+        }
+        return jsonNode.get(name).asText();
+
+    }
+
     private void setPackage(JsonNode jsonNode) {
-        setModel(jsonNode.get("model").asText());
-        setDao(jsonNode.get("dao").asText());
-        setMapper(jsonNode.get("mapper").asText());
+        for (String tmp : PACKAGE_CONFIG) {
+            try {
+                ReflectUtils.invokeSetter(this, "set" + tmp.substring(0, 1).toUpperCase() +
+                        tmp.substring(1), String.class, setString(jsonNode, tmp));
+            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void setDataBase(JsonNode jsonNode) {
