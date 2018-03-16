@@ -4,24 +4,29 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * @author Created By LiJie at 2018/03/14
  */
 public class Configuration {
+    private final static Logger logger = LoggerFactory.getLogger(Configuration.class);
     private YAMLFactory yamlFactory = new YAMLFactory();
     private JsonNode jsonNode;
 
     /**
      * jdbc mysql部分
      */
-    private String jdbc;
+    private String driver;
     private String url;
     private String username;
     private String password;
@@ -35,7 +40,7 @@ public class Configuration {
     /**
      * table部分
      */
-    private List<String> tables;
+    private List<TableConfiguration> tables;
 
     public Configuration() {
 
@@ -49,12 +54,42 @@ public class Configuration {
             jsonNode = objectMapper.readTree(yamlParser);
             setDataBase(jsonNode.get("database"));
             setPackage(jsonNode.get("package"));
+            setTables(jsonNode.get("tables"));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    private void setTables(JsonNode jsonNode){
 
+    private void setTables(JsonNode jsonNode) {
+        Iterator<JsonNode> it = jsonNode.iterator();
+        while (it.hasNext()) {
+            JsonNode tmp = it.next();
+            setTable(tmp);
+        }
+    }
+
+    private void setTable(JsonNode jsonNode) {
+        String names = jsonNode.get("name").asText();
+        String[] nameArray = names.split(",");
+        List<TableConfiguration> tableList = new ArrayList<>();
+        for (int i = 0; i < nameArray.length; i++) {
+            TableConfiguration table = new TableConfiguration();
+
+        }
+    }
+
+    private boolean setOfNull(JsonNode jsonNode, String name) {
+        if (jsonNode == null) {
+            return false;
+        }
+        if (jsonNode.get(name) == null) {
+            return false;
+        }
+        try {
+            return jsonNode.get(name).asBoolean();
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private void setPackage(JsonNode jsonNode) {
@@ -64,7 +99,7 @@ public class Configuration {
     }
 
     private void setDataBase(JsonNode jsonNode) {
-        setJdbc(jsonNode.get("jdbc").asText());
+        setDriver(jsonNode.get("driver").asText());
         setUrl(jsonNode.get("url").asText());
         setUsername(jsonNode.get("username").asText());
         setPassword(jsonNode.get("password").asText());
@@ -72,12 +107,12 @@ public class Configuration {
     }
 
 
-    public String getJdbc() {
-        return jdbc;
+    public String getDriver() {
+        return driver;
     }
 
-    public Configuration setJdbc(String jdbc) {
-        this.jdbc = jdbc;
+    public Configuration setDriver(String driver) {
+        this.driver = driver;
         return this;
     }
 
@@ -135,12 +170,4 @@ public class Configuration {
         return this;
     }
 
-    public List<String> getTables() {
-        return tables;
-    }
-
-    public Configuration setTables(List<String> tables) {
-        this.tables = tables;
-        return this;
-    }
 }
