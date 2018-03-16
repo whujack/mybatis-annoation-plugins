@@ -39,8 +39,7 @@ public class TableFactory implements AbstractFactory<Table> {
         try {
             while (resultSet.next()) {
                 String sql = resultSet.getString("Create Table");
-                SQLAnalyze sqlAnalyze = new SQLAnalyze(sql);
-                sqlAnalyze.analyzeCreateTable(sql);
+                table.setTable(sql);
             }
         } catch (Exception e) {
             e.printStackTrace();

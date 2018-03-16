@@ -19,6 +19,10 @@ public class SQLAnalyze {
         this.sql = sql;
     }
 
+    public SQLAnalyze() {
+
+    }
+
 
     /**
      * 分析创建表的sql，产生table数据结构
@@ -30,12 +34,8 @@ public class SQLAnalyze {
             return null;
         }
         Table table = new Table();
-        String tableSql = sql.substring(0, sql.indexOf("("));
-        String fields = sql.substring(sql.indexOf("(") + 1, sql.indexOf(")"));
-        logger.info("table={}   fields={}", tableSql, fields);
-        table.setName(getTableName(tableSql));
-        analyze(fields);
-        return null;
+
+        return table;
     }
 
     /**
@@ -43,21 +43,31 @@ public class SQLAnalyze {
      *
      * @param sql 行语句
      */
-    private void analyze(String sql) {
+    public Table.Column analyze(String sql, Table.Column column) {
+        if (sql.trim().indexOf('`') == 0) {
+            column.setName(getValue(sql));
 
-
+        }
+        return null;
     }
 
-    private String getTableName(String sql) {
+    public String getTableName(String sql) {
         sql = sql.toLowerCase();
         if (!sql.contains("create")) {
             return null;
         }
+        return getValue(sql);
+    }
+
+    private String getValue(String sql) {
         Pattern pattern = Pattern.compile("`(\\w*|\\d*)`");
         Matcher matcher = pattern.matcher(sql);
         if (matcher.find()) {
             return matcher.group(1);
         }
+        return null;
+    }
+    private Class getType(String sql){
         return null;
     }
 }

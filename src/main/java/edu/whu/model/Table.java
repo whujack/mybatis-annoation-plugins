@@ -1,5 +1,7 @@
 package edu.whu.model;
 
+import edu.whu.syntax.SQLAnalyze;
+import jdk.nashorn.internal.runtime.regexp.joni.Syntax;
 import sun.tools.jconsole.Tab;
 
 import java.util.List;
@@ -23,6 +25,22 @@ public class Table {
 
     }
 
+    public Table setTable(String sql) {
+        SQLAnalyze sqlAnalyze=new SQLAnalyze();
+        String tableSql = sql.substring(0, sql.indexOf("("));
+        String fields = sql.substring(sql.indexOf("(") + 1, sql.indexOf(")"));
+        setName(sqlAnalyze.getTableName(tableSql));
+        setTable(fields);
+
+        String[] syntax = fields.split(",");
+        for (String tmp : syntax) {
+            Column column=new Column();
+            sqlAnalyze.analyze(tmp,column);
+        }
+
+        return this;
+    }
+
     public Column getPrimaryKey() {
         return primaryKey;
     }
@@ -38,10 +56,6 @@ public class Table {
 
     public Table setColumns(List<Column> columns) {
         this.columns = columns;
-        return this;
-    }
-
-    public Table setColumns(String sql) {
         return this;
     }
 
@@ -101,7 +115,7 @@ public class Table {
     /**
      * 数据库column
      */
-    class Column {
+    public class Column {
         private String name;
         private String type;
         private String column;
