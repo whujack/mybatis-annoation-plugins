@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -74,7 +75,13 @@ public class Configuration {
         List<TableConfiguration> tableList = new ArrayList<>();
         for (int i = 0; i < nameArray.length; i++) {
             TableConfiguration table = new TableConfiguration();
+            logger.info("name={}", nameArray[i]);
+            table.setName(nameArray[i]);
 
+            table.setEnableInsert(setOfNull(jsonNode, "enableInsert"));
+            table.setEnableDelete(setOfNull(jsonNode, "enableDelete"));
+            table.setEnableSelect(setOfNull(jsonNode, "enableSelect"));
+            table.setEnableSelect(setOfNull(jsonNode, "enableUpdate"));
         }
     }
 
