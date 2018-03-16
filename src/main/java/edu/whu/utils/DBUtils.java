@@ -69,7 +69,9 @@ public class DBUtils {
             Connection connection = getConnection(driver, url, username, password);
             PreparedStatement preparedStatement = connection.prepareStatement("show tables;");
             ResultSet resultSet = preparedStatement.executeQuery();
-            System.out.print(resultSet);
+            while (resultSet.next()) {
+                System.out.print(resultSet.getString(1));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

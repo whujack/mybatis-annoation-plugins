@@ -1,5 +1,7 @@
 package edu.whu.model;
 
+import sun.tools.jconsole.Tab;
+
 import java.util.List;
 
 /**
@@ -13,10 +15,11 @@ public class Table {
     private TableConfiguration tableConfiguration;
 
 
-    public Table(){
+    public Table() {
 
     }
-    public Table(String table){
+
+    public Table(String table) {
 
     }
 
@@ -35,6 +38,10 @@ public class Table {
 
     public Table setColumns(List<Column> columns) {
         this.columns = columns;
+        return this;
+    }
+
+    public Table setColumns(String sql) {
         return this;
     }
 
