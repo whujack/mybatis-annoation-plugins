@@ -6,9 +6,11 @@ import java.util.List;
  * @author Created By LiJie at 2018/03/15
  */
 public class Table {
+    private String name;
     private Column primaryKey;
     private List<Column> columns;
     private List<Index> indexList;
+    private TableConfiguration tableConfiguration;
 
 
     public Table(){
@@ -42,6 +44,24 @@ public class Table {
 
     public Table setIndexs(List<Index> indexList) {
         this.indexList = indexList;
+        return this;
+    }
+
+    public TableConfiguration getTableConfiguration() {
+        return tableConfiguration;
+    }
+
+    public Table setTableConfiguration(TableConfiguration tableConfiguration) {
+        this.tableConfiguration = tableConfiguration;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Table setName(String name) {
+        this.name = name;
         return this;
     }
 
