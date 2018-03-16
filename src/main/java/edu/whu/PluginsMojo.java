@@ -47,5 +47,6 @@ public class PluginsMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException {
         Configuration configuration=new Configuration(configurationFile);
         getLog().info(JSON.toJSONString(configuration));
+
     }
 }

@@ -68,30 +68,32 @@ public class Configuration {
     }
 
     private void setTables(JsonNode jsonNode) {
+        this.tables=new ArrayList<>();
         Iterator<JsonNode> it = jsonNode.iterator();
         while (it.hasNext()) {
             JsonNode tmp = it.next();
-            setTable(tmp);
+            this.tables.addAll(setTable(tmp));
         }
     }
 
-    private void setTable(JsonNode jsonNode) {
+    private List<TableConfiguration> setTable(JsonNode jsonNode) {
         String names = jsonNode.get("name").asText();
         String[] nameArray = names.split(",");
         List<TableConfiguration> tableList = new ArrayList<>();
         for (int i = 0; i < nameArray.length; i++) {
             TableConfiguration table = new TableConfiguration();
             table.setName(nameArray[i]);
-            for(String tmp:TABLE_CONFIG) {
+            for (String tmp : TABLE_CONFIG) {
                 try {
-                    ReflectUtils.invokeSetter(table, "set" +tmp.substring(0,1).toUpperCase()+
-                            tmp.substring(1),Boolean.class,setOfNull(jsonNode,tmp));
+                    ReflectUtils.invokeSetter(table, "set" + tmp.substring(0, 1).toUpperCase() +
+                            tmp.substring(1), Boolean.class, setOfNull(jsonNode, tmp));
                 } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
                     e.printStackTrace();
                 }
             }
             tableList.add(table);
         }
+        return tableList;
     }
 
     private boolean setOfNull(JsonNode jsonNode, String name) {
@@ -202,4 +204,12 @@ public class Configuration {
         return this;
     }
 
+    public List<TableConfiguration> getTables() {
+        return tables;
+    }
+
+    public Configuration setTables(List<TableConfiguration> tables) {
+        this.tables = tables;
+        return this;
+    }
 }

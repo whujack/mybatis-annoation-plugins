@@ -4,7 +4,7 @@
   <groupId>edu.whu</groupId>
   <artifactId>mybatis-annotation-plugins</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>1.2-SNAPSHOT</version>
+  <version>1.2</version>
     <build>
         <plugins>
             <plugin>
