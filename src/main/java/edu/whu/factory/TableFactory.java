@@ -40,6 +40,7 @@ public class TableFactory implements AbstractFactory<Table> {
             while (resultSet.next()) {
                 String sql = resultSet.getString("Create Table");
                 table.setTable(sql);
+                logger.info(JSON.toJSONString(table));
             }
         } catch (Exception e) {
             e.printStackTrace();

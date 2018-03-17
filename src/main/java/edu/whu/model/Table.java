@@ -1,9 +1,10 @@
 package edu.whu.model;
 
 import edu.whu.syntax.SQLAnalyze;
-import jdk.nashorn.internal.runtime.regexp.joni.Syntax;
-import sun.tools.jconsole.Tab;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,29 +17,52 @@ public class Table {
     private List<Index> indexList;
     private TableConfiguration tableConfiguration;
 
+    private static final Logger logger = LoggerFactory.getLogger(Table.class);
+
 
     public Table() {
 
     }
 
-    public Table(String table) {
-
-    }
 
     public Table setTable(String sql) {
-        SQLAnalyze sqlAnalyze=new SQLAnalyze();
+        SQLAnalyze sqlAnalyze = new SQLAnalyze();
         String tableSql = sql.substring(0, sql.indexOf("("));
-        String fields = sql.substring(sql.indexOf("(") + 1, sql.indexOf(")"));
+        String fields = sql.substring(sql.indexOf("(") + 1, sql.lastIndexOf(")"));
         setName(sqlAnalyze.getTableName(tableSql));
-        setTable(fields);
 
         String[] syntax = fields.split(",");
+        this.columns = new ArrayList<>();
         for (String tmp : syntax) {
-            Column column=new Column();
-            sqlAnalyze.analyze(tmp,column);
+            Column column = new Column();
+            sqlAnalyze.analyze(tmp, column);
+            this.columns.add(column);
+        }
+        for (String tmp : syntax) {
+            Column column = analyzePrimary(tmp, this.columns);
+            if (column != null) {
+                this.primaryKey = column;
+                break;
+            }
         }
 
         return this;
+    }
+
+    private Column analyzePrimary(String sql, List<Column> columns) {
+        sql = sql.toLowerCase();
+        if (columns == null || columns.size() == 0) {
+            return null;
+        }
+        if (sql.contains("primary") && sql.contains("key")) {
+            for (Column column : columns) {
+                if (sql.contains(column.getName())) {
+                    column.isPrimaryKey = true;
+                    return column;
+                }
+            }
+        }
+        return null;
     }
 
     public Column getPrimaryKey() {
@@ -89,7 +113,7 @@ public class Table {
     /**
      * 数据库索引
      */
-    class Index {
+    public class Index {
         private String name;
         private List<Column> columns;
 
@@ -117,7 +141,7 @@ public class Table {
      */
     public class Column {
         private String name;
-        private String type;
+        private SQLAnalyze.Type type;
         private String column;
         private Boolean isPrimaryKey;
 
@@ -130,11 +154,11 @@ public class Table {
             return this;
         }
 
-        public String getType() {
+        public SQLAnalyze.Type getType() {
             return type;
         }
 
-        public Column setType(String type) {
+        public Column setType(SQLAnalyze.Type type) {
             this.type = type;
             return this;
         }
