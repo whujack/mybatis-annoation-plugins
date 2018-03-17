@@ -1,8 +1,8 @@
 package edu.whu;
 
 import com.alibaba.fastjson.JSON;
+import edu.whu.config.Configuration;
 import edu.whu.factory.TableFactory;
-import edu.whu.model.Configuration;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;

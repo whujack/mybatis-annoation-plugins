@@ -1,8 +1,7 @@
 package edu.whu.utils;
 
 
-import edu.whu.model.Configuration;
-import edu.whu.model.TableConfiguration;
+import edu.whu.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

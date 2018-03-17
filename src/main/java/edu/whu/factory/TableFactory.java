@@ -1,17 +1,15 @@
 package edu.whu.factory;
 
 import com.alibaba.fastjson.JSON;
-import edu.whu.model.Configuration;
+import edu.whu.config.Configuration;
 import edu.whu.model.Table;
 import edu.whu.model.TableConfiguration;
-import edu.whu.syntax.SQLAnalyze;
 import edu.whu.utils.DBUtils;
 import edu.whu.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 
 /**
