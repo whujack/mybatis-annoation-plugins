@@ -1,4 +1,4 @@
-package edu.whu.model;
+package edu.whu.config;
 
 /**
  * @author Created By LiJie at 2018/03/14

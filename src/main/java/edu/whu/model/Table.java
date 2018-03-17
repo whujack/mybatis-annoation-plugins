@@ -1,5 +1,6 @@
 package edu.whu.model;
 
+import edu.whu.config.TableConfiguration;
 import edu.whu.syntax.SQLAnalyze;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

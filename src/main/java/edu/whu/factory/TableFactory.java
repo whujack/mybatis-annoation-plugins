@@ -2,8 +2,8 @@ package edu.whu.factory;
 
 import com.alibaba.fastjson.JSON;
 import edu.whu.config.Configuration;
+import edu.whu.config.TableConfiguration;
 import edu.whu.model.Table;
-import edu.whu.model.TableConfiguration;
 import edu.whu.utils.DBUtils;
 import edu.whu.utils.StringUtils;
 import org.slf4j.Logger;
