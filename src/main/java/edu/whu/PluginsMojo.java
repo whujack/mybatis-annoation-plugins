@@ -2,6 +2,8 @@ package edu.whu;
 
 import com.alibaba.fastjson.JSON;
 import edu.whu.config.Configuration;
+import edu.whu.constant.GlobalConstant;
+import edu.whu.factory.Factory;
 import edu.whu.factory.TableFactory;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -23,17 +25,24 @@ public class PluginsMojo extends AbstractMojo {
     @Parameter(property = "configurationFile", defaultValue = "${project.basedir}/src/main/resources/mybatis-annotation-config.yml", required = true)
     private File configurationFile;
 
+    @Parameter(property = "baseDirFile", defaultValue = "${project.basedir}")
+    private File baseDirFIle;
+
 
     @Override
     public void execute() throws MojoExecutionException {
         //读取配置文件
+        GlobalConstant.BASE_DIR_FILE = baseDirFIle;
         Configuration configuration = new Configuration(configurationFile);
+
 
         //工厂模式读取table
         for (int i = 0; i < configuration.getTables().size(); i++) {
             TableFactory tableFactory = new TableFactory(configuration.getTables().get(i), configuration);
             tableFactory.produce();
         }
+        Factory factory = new Factory(configuration);
+        factory.produce();
 
 
         getLog().info(JSON.toJSONString(configuration));
