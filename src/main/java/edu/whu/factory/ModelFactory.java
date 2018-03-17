@@ -2,8 +2,12 @@ package edu.whu.factory;
 
 import edu.whu.config.Configuration;
 import edu.whu.constant.GlobalConstant;
+import edu.whu.model.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Created By LiJie at 2018/3/16
@@ -19,9 +23,19 @@ public class ModelFactory implements AbstractFactory {
     @Override
     public Object produce() {
         String pack = configuration.getModel();
-        //String path= GlobalConstant.BASE_DIR+"/"+pack.replaceAll(".","\\");
-        //logger.info(GlobalConstant.BASE_DIR);
-        return null;
+        File baseFile = GlobalConstant.BASE_DIR_FILE;
+        String path = baseFile.getAbsolutePath() + "/src/main/java/" + pack.replaceAll("\\.", "/");
+        for (int i = 0; configuration.getTables() != null && i < configuration.getTables().size(); i++) {
+           // createTableModel(path,configuration);
+        }
+
+
+        return true;
+    }
+
+    private void createTableModel(String basePath, Table table) {
+
+
     }
 
 }
