@@ -1,6 +1,5 @@
 package edu.whu.factory;
 
-import com.sun.istack.internal.NotNull;
 import edu.whu.config.Configuration;
 import edu.whu.config.TableConfiguration;
 import edu.whu.constant.GlobalConstant;
@@ -49,13 +48,10 @@ public class ModelFactory implements AbstractFactory {
      */
     private void createTableModel(String basePath, Table table, TableConfiguration configuration) {
         File file = new File(basePath);
+        logger.info(file.getAbsolutePath());
         //不存在时创建文件
         if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            file.mkdirs();
         }
 
     }
@@ -67,9 +63,16 @@ public class ModelFactory implements AbstractFactory {
      * @param tableConfigurations config
      * @return config
      */
-    private TableConfiguration getTableConfiguration(final Table table, @NotNull List<TableConfiguration> tableConfigurations) {
-        Optional<TableConfiguration> tableConfiguration = tableConfigurations.stream().filter(tmp -> tmp.getName().equals(table.getName())).findAny();
-        return tableConfiguration.get();
+    private TableConfiguration getTableConfiguration(final Table table, List<TableConfiguration> tableConfigurations) {
+        if (table == null) {
+            return null;
+        }
+        for (int i = 0; tableConfigurations != null && i < tableConfigurations.size(); i++) {
+            if (tableConfigurations.get(i).getName().equals(table.getName())) {
+                return tableConfigurations.get(i);
+            }
+        }
+        return null;
     }
 
 }

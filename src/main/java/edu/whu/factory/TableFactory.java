@@ -43,7 +43,7 @@ public class TableFactory implements AbstractFactory<Table> {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return table;
     }
 
 }

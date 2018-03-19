@@ -44,8 +44,10 @@ public class PluginsMojo extends AbstractMojo {
         for (int i = 0; i < configuration.getTables().size(); i++) {
             TableFactory tableFactory = new TableFactory(configuration.getTables().get(i), configuration);
             Table table = tableFactory.produce();
+            getLog().info(JSON.toJSONString(table));
             tableList.add(table);
         }
+        getLog().info("tableName="+JSON.toJSONString(tableList));
         Factory factory = new Factory(configuration,tableList);
         factory.produce();
 
