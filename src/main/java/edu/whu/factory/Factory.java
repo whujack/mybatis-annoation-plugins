@@ -20,8 +20,12 @@ public class Factory implements AbstractFactory {
 
     @Override
     public Object produce() {
-        AbstractFactory modelFactory = new ModelFactory(configuration,tableList);
+        AbstractFactory modelFactory = new ModelFactory(configuration, tableList);
         modelFactory.produce();
+        AbstractFactory mapperFactory = new MapperFactory(configuration, tableList);
+        mapperFactory.produce();
+        AbstractFactory daoFactory = new DaoFactory(configuration, tableList);
+        daoFactory.produce();
         return null;
     }
 
