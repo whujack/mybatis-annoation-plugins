@@ -20,7 +20,7 @@ public class Factory implements AbstractFactory {
 
     @Override
     public Object produce() {
-        ModelFactory modelFactory = new ModelFactory(configuration,tableList);
+        AbstractFactory modelFactory = new ModelFactory(configuration,tableList);
         modelFactory.produce();
         return null;
     }

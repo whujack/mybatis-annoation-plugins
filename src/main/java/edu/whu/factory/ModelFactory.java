@@ -53,6 +53,14 @@ public class ModelFactory implements AbstractFactory {
         if (!file.exists()) {
             file.mkdirs();
         }
+        file = new File(basePath + "/" + table.getClazzName() + ".java");
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 

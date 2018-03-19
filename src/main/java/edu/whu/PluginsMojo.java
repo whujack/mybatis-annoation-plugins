@@ -35,19 +35,21 @@ public class PluginsMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException {
         //读取配置文件
+        getLog().info("mybatis-annotation-plugins读取全局配置文件");
         GlobalConstant.BASE_DIR_FILE = baseDirFIle;
         Configuration configuration = new Configuration(configurationFile);
 
+        getLog().info("mybatis-annotation-plugins读取table配置文件");
 
         //工厂模式读取table
         List<Table> tableList = new ArrayList<>();
         for (int i = 0; i < configuration.getTables().size(); i++) {
             TableFactory tableFactory = new TableFactory(configuration.getTables().get(i), configuration);
             Table table = tableFactory.produce();
-            getLog().info(JSON.toJSONString(table));
             tableList.add(table);
         }
-        getLog().info("tableName="+JSON.toJSONString(tableList));
+        getLog().info("mybatis-annotation-plugins产生model文件");
+
         Factory factory = new Factory(configuration,tableList);
         factory.produce();
 

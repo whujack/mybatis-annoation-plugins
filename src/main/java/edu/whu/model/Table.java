@@ -2,6 +2,7 @@ package edu.whu.model;
 
 import edu.whu.config.TableConfiguration;
 import edu.whu.syntax.SQLAnalyze;
+import edu.whu.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,6 +66,12 @@ public class Table {
         }
         return null;
     }
+
+    public String getClazzName() {
+        String clazzName = StringUtils.toCamelCase(name);
+        return clazzName.substring(0, 1).toUpperCase() + clazzName.substring(1);
+    }
+
 
     public Column getPrimaryKey() {
         return primaryKey;
