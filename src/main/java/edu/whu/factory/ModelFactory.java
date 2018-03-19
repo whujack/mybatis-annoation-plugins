@@ -81,7 +81,7 @@ public class ModelFactory implements AbstractFactory {
         }
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            logger.info(clazz.toString());
+           // logger.info(clazz.toString());
             writer.append(clazz.toString());
             writer.flush();
             writer.close();

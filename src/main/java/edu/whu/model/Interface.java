@@ -15,12 +15,12 @@ public class Interface {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("package " + packageName);
+        builder.append("package " + packageName+";\n\n");
         for (int i = 0; importPackage != null && i < importPackage.size(); i++) {
-            builder.append("\n" + importPackage.get(i));
+            builder.append("\n" + importPackage.get(i)+";");
         }
-        builder.append("import org.apache.ibatis.annotations.*;\n");
-        builder.append("public interface " + name + "{\n");
+        //builder.append("\nimport org.apache.ibatis.annotations.*;\n");
+        builder.append("\npublic interface " + name + "{\n");
         for (int i = 0; methodList != null; i++) {
             builder.append("\n\t" + methodList.get(i));
         }
