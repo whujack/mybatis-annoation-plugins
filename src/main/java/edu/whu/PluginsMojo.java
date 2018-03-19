@@ -5,12 +5,15 @@ import edu.whu.config.Configuration;
 import edu.whu.constant.GlobalConstant;
 import edu.whu.factory.Factory;
 import edu.whu.factory.TableFactory;
+import edu.whu.model.Table;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Created By LiJie at 2018/03/14
@@ -37,11 +40,13 @@ public class PluginsMojo extends AbstractMojo {
 
 
         //工厂模式读取table
+        List<Table> tableList = new ArrayList<>();
         for (int i = 0; i < configuration.getTables().size(); i++) {
             TableFactory tableFactory = new TableFactory(configuration.getTables().get(i), configuration);
-            tableFactory.produce();
+            Table table = tableFactory.produce();
+            tableList.add(table);
         }
-        Factory factory = new Factory(configuration);
+        Factory factory = new Factory(configuration,tableList);
         factory.produce();
 
 
