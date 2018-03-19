@@ -3,14 +3,17 @@ package edu.whu.factory;
 import edu.whu.config.Configuration;
 import edu.whu.config.TableConfiguration;
 import edu.whu.constant.GlobalConstant;
+import edu.whu.model.Clazz;
 import edu.whu.model.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Created By LiJie at 2018/3/16
@@ -53,6 +56,21 @@ public class ModelFactory implements AbstractFactory {
         if (!file.exists()) {
             file.mkdirs();
         }
+        Clazz clazz = new Clazz();
+        clazz.setClassName(table.getClazzName());
+        clazz.setPackageName(this.configuration.getModel());
+        clazz.setColumnList(table.getColumns());
+        List<String> importClazz = new ArrayList<>();
+        for (int i = 0; i < table.getColumns().size(); i++) {
+            Table.Column column = table.getColumns().get(i);
+            if (column != null && column.getType() != null) {
+                if(!isInArray(importClazz,column.getType().getPackageName())) {
+                    importClazz.add(column.getType().getPackageName());
+                }
+            }
+        }
+        clazz.setImportClazz(importClazz);
+
         file = new File(basePath + "/" + table.getClazzName() + ".java");
         if (!file.exists()) {
             try {
@@ -60,6 +78,15 @@ public class ModelFactory implements AbstractFactory {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            logger.info(clazz.toString());
+            writer.append(clazz.toString());
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
@@ -81,6 +108,18 @@ public class ModelFactory implements AbstractFactory {
             }
         }
         return null;
+    }
+
+    private boolean isInArray(List<String> list, String tmp) {
+        if (list == null || tmp == null) {
+            return false;
+        }
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).equals(tmp)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

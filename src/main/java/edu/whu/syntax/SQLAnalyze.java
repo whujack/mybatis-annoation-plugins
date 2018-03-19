@@ -116,7 +116,7 @@ public class SQLAnalyze {
         Long("Long", "java.lang.Long"),
         Float("Float", "java.lang.Float"),
         Double("Double", "java.lang.Double"),
-        String("Stirng", "java.lang.String"),
+        String("String", "java.lang.String"),
         Date("Date", "java.util.Date");
 
         private String name;
@@ -125,7 +125,14 @@ public class SQLAnalyze {
         Type(String name, String packageName) {
             this.name = name;
             this.packageName = packageName;
+        }
 
+        public java.lang.String getPackageName() {
+            return packageName;
+        }
+
+        public java.lang.String getName() {
+            return name;
         }
     }
 }

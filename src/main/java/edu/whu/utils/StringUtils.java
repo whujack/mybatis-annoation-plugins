@@ -49,6 +49,20 @@ public class StringUtils {
         return result;
     }
 
+    /**
+     * 首字母大写
+     *
+     * @param name 名字
+     * @return 名字
+     */
+    public static String firstToUpper(String name) {
+        if (name == null || name.length() == 0) {
+            return null;
+        }
+
+        return name.substring(0, 1).toUpperCase() + name.substring(1);
+    }
+
     public static void main(String[] args) {
         //String res = replace("#{}#{}#{}#1234", "a", "b", "c");
         String res = "sale_abc_afd_";
