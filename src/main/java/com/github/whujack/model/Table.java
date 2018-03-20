@@ -1,8 +1,8 @@
-package edu.whu.model;
+package com.github.whujack.model;
 
-import edu.whu.config.TableConfiguration;
-import edu.whu.syntax.SQLAnalyze;
-import edu.whu.utils.StringUtils;
+import com.github.whujack.config.TableConfiguration;
+import com.github.whujack.syntax.SQLAnalyze;
+import com.github.whujack.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

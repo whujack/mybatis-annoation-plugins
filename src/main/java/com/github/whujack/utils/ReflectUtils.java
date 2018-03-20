@@ -1,4 +1,4 @@
-package edu.whu.utils;
+package com.github.whujack.utils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

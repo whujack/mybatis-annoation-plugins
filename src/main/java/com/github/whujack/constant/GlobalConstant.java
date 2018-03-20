@@ -1,4 +1,4 @@
-package edu.whu.constant;
+package com.github.whujack.constant;
 
 import java.io.File;
 

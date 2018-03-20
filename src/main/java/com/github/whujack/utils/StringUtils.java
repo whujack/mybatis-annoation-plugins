@@ -1,4 +1,4 @@
-package edu.whu.utils;
+package com.github.whujack.utils;
 
 /**
  * @author Created By LiJie at 2018/3/16

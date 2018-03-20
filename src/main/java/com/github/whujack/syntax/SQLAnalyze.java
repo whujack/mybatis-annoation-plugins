@@ -1,7 +1,7 @@
-package edu.whu.syntax;
+package com.github.whujack.syntax;
 
+import com.github.whujack.model.Table;
 import com.mysql.jdbc.StringUtils;
-import edu.whu.model.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

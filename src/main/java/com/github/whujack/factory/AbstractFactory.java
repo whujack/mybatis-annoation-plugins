@@ -1,4 +1,4 @@
-package edu.whu.factory;
+package com.github.whujack.factory;
 
 /**
  * @author Created By LiJie at 2018/3/16

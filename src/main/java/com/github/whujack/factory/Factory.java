@@ -1,7 +1,7 @@
-package edu.whu.factory;
+package com.github.whujack.factory;
 
-import edu.whu.config.Configuration;
-import edu.whu.model.Table;
+import com.github.whujack.config.Configuration;
+import com.github.whujack.model.Table;
 
 import java.util.List;
 

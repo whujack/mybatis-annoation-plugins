@@ -1,7 +1,7 @@
-package edu.whu.utils;
+package com.github.whujack.utils;
 
 
-import edu.whu.config.Configuration;
+import com.github.whujack.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,10 +1,10 @@
-package edu.whu.factory;
+package com.github.whujack.factory;
 
-import edu.whu.config.Configuration;
-import edu.whu.constant.GlobalConstant;
-import edu.whu.model.Table;
-import edu.whu.model.Xml;
-import edu.whu.utils.StringUtils;
+import com.github.whujack.config.Configuration;
+import com.github.whujack.constant.GlobalConstant;
+import com.github.whujack.model.Table;
+import com.github.whujack.model.Xml;
+import com.github.whujack.utils.StringUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;

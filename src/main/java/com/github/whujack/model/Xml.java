@@ -1,6 +1,6 @@
-package edu.whu.model;
+package com.github.whujack.model;
 
-import edu.whu.utils.StringUtils;
+import com.github.whujack.utils.StringUtils;
 
 import java.util.List;
 

@@ -1,10 +1,10 @@
-package edu.whu.factory;
+package com.github.whujack.factory;
 
-import edu.whu.config.Configuration;
-import edu.whu.config.TableConfiguration;
-import edu.whu.constant.GlobalConstant;
-import edu.whu.model.Clazz;
-import edu.whu.model.Table;
+import com.github.whujack.config.Configuration;
+import com.github.whujack.config.TableConfiguration;
+import com.github.whujack.constant.GlobalConstant;
+import com.github.whujack.model.Clazz;
+import com.github.whujack.model.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

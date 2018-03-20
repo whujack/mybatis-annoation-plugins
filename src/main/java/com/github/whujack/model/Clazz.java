@@ -1,7 +1,7 @@
-package edu.whu.model;
+package com.github.whujack.model;
 
-import edu.whu.syntax.SQLAnalyze;
-import edu.whu.utils.StringUtils;
+import com.github.whujack.syntax.SQLAnalyze;
+import com.github.whujack.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;

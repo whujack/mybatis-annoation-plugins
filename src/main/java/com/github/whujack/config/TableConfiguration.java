@@ -1,4 +1,4 @@
-package edu.whu.config;
+package com.github.whujack.config;
 
 /**
  * @author Created By LiJie at 2018/03/14

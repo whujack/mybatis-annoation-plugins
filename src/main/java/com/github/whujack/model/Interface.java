@@ -1,4 +1,4 @@
-package edu.whu.model;
+package com.github.whujack.model;
 
 import java.util.List;
 

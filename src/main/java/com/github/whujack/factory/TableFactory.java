@@ -1,11 +1,11 @@
-package edu.whu.factory;
+package com.github.whujack.factory;
 
 import com.alibaba.fastjson.JSON;
-import edu.whu.config.Configuration;
-import edu.whu.config.TableConfiguration;
-import edu.whu.model.Table;
-import edu.whu.utils.DBUtils;
-import edu.whu.utils.StringUtils;
+import com.github.whujack.config.Configuration;
+import com.github.whujack.config.TableConfiguration;
+import com.github.whujack.model.Table;
+import com.github.whujack.utils.DBUtils;
+import com.github.whujack.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

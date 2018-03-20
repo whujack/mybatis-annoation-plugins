@@ -1,11 +1,11 @@
-package edu.whu;
+package com.github.whujack;
 
 import com.alibaba.fastjson.JSON;
-import edu.whu.config.Configuration;
-import edu.whu.constant.GlobalConstant;
-import edu.whu.factory.Factory;
-import edu.whu.factory.TableFactory;
-import edu.whu.model.Table;
+import com.github.whujack.config.Configuration;
+import com.github.whujack.constant.GlobalConstant;
+import com.github.whujack.factory.Factory;
+import com.github.whujack.factory.TableFactory;
+import com.github.whujack.model.Table;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
