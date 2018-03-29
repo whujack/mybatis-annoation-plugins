@@ -33,7 +33,7 @@ public class ModelFactory implements AbstractFactory {
     public Object produce() {
         String pack = configuration.getPackages().getModel().getName();
         File baseFile = GlobalConstant.BASE_DIR_FILE;
-        String path = baseFile.getAbsolutePath() + "/src/main/java/" + pack.replaceAll("\\.", "/");
+        String path = baseFile.getAbsolutePath() + "/"+configuration.getPackages().getModel().getTarget()+"/" + pack.replaceAll("\\.", "/");
         for (int i = 0; tableList != null && i < tableList.size(); i++) {
             createTableModel(path, tableList.get(i));
         }

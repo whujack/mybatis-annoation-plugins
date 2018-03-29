@@ -28,7 +28,7 @@ public class MapperFactory implements AbstractFactory {
     public Object produce() {
         String mapperDir = configuration.getPackages().getMapper().getName();
         File file = GlobalConstant.BASE_DIR_FILE;
-        String path = file.getAbsolutePath() + "/" + "src/main/resources/" + mapperDir;
+        String path = file.getAbsolutePath() + "/" + configuration.getPackages().getMapper().getTarget()+"/" + mapperDir;
         file = new File(path);
         if (!file.exists()) {
             file.mkdirs();
