@@ -30,7 +30,8 @@ public class DaoFactory implements AbstractFactory {
     @Override
     public Object produce() {
         File file = GlobalConstant.BASE_DIR_FILE;
-        String path = file.getAbsolutePath() + "/src/main/java/" + configuration.getDao().replaceAll("\\.", "/") + "/";
+        String path = file.getAbsolutePath() + "/" + configuration.getPackages().getDao().getTarget() + "/" +
+                configuration.getPackages().getDao().getName().replaceAll("\\.", "/") + "/";
         file = new File(path);
         if (!file.exists()) {
             file.mkdirs();
@@ -56,7 +57,7 @@ public class DaoFactory implements AbstractFactory {
         }
         Interface inter = new Interface();
         inter.setName(name);
-        inter.setPackageName(configuration.getDao());
+        inter.setPackageName(configuration.getPackages().getDao().getName());
         BufferedWriter writer = null;
         try {
             writer = new BufferedWriter(new FileWriter(file));

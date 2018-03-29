@@ -1,11 +1,14 @@
 package com.github.whujack.model;
 
+import com.github.whujack.config.Configuration;
 import com.github.whujack.config.TableConfiguration;
 import com.github.whujack.syntax.SQLAnalyze;
+import com.github.whujack.utils.DBUtils;
 import com.github.whujack.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +21,7 @@ public class Table {
     private List<Column> columns;
     private List<Index> indexList;
     private TableConfiguration tableConfiguration;
+    private static final String CREATED_TABLE_SQL = "SHOW CREATE TABLE #{}";
 
     private static final Logger logger = LoggerFactory.getLogger(Table.class);
 
@@ -27,7 +31,17 @@ public class Table {
     }
 
 
-    public Table setTable(String sql) {
+    public Table setTable(TableConfiguration tableConfiguration, Configuration configuration) {
+        this.tableConfiguration = tableConfiguration;
+        String sql = null;
+        ResultSet resultSet = DBUtils.execute(configuration.getDatabase(), StringUtils.replace(CREATED_TABLE_SQL, tableConfiguration.getName()));
+        try {
+            while (resultSet.next()) {
+                sql = resultSet.getString("Create Table");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         SQLAnalyze sqlAnalyze = new SQLAnalyze();
         String tableSql = sql.substring(0, sql.indexOf("("));
         String fields = sql.substring(sql.indexOf("(") + 1, sql.lastIndexOf(")"));

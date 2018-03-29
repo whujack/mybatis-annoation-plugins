@@ -27,7 +27,7 @@ public class SQLAnalyze {
 
     /**
      * 分析创建表的sql，产生table数据结构
-     *
+     *@param sql sql参数
      * @return 返回table
      */
     public Table analyzeCreateTable(String sql) {
@@ -41,8 +41,9 @@ public class SQLAnalyze {
 
     /**
      * 语句分析
-     *
+     * @param column column参数
      * @param sql 行语句
+     * @return column
      */
     public Table.Column analyze(String sql, Table.Column column) {
         if (sql.trim().indexOf('`') == 0) {

@@ -26,7 +26,7 @@ public class MapperFactory implements AbstractFactory {
 
     @Override
     public Object produce() {
-        String mapperDir = configuration.getMapper();
+        String mapperDir = configuration.getPackages().getMapper().getName();
         File file = GlobalConstant.BASE_DIR_FILE;
         String path = file.getAbsolutePath() + "/" + "src/main/resources/" + mapperDir;
         file = new File(path);
@@ -52,9 +52,9 @@ public class MapperFactory implements AbstractFactory {
         String name = StringUtils.firstToUpper(StringUtils.toCamelCase(table.getName()));
         Xml xml = new Xml();
         xml.setColumnList(table.getColumns());
-        xml.setNamespace(configuration.getDao() + "." + name+"Mapper");
+        xml.setNamespace(configuration.getPackages().getDao().getName() + "." + name+"Mapper");
         xml.setResultMapId("BaseResultMap");
-        xml.setResultMapType(configuration.getModel() + "." + name);
+        xml.setResultMapType(configuration.getPackages().getModel().getName() + "." + name);
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
             writer.write(xml.toString());

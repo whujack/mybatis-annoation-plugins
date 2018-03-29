@@ -31,11 +31,11 @@ public class ModelFactory implements AbstractFactory {
 
     @Override
     public Object produce() {
-        String pack = configuration.getModel();
+        String pack = configuration.getPackages().getModel().getName();
         File baseFile = GlobalConstant.BASE_DIR_FILE;
         String path = baseFile.getAbsolutePath() + "/src/main/java/" + pack.replaceAll("\\.", "/");
         for (int i = 0; tableList != null && i < tableList.size(); i++) {
-            createTableModel(path, tableList.get(i), getTableConfiguration(tableList.get(i), configuration.getTables()));
+            createTableModel(path, tableList.get(i));
         }
 
 
@@ -47,9 +47,8 @@ public class ModelFactory implements AbstractFactory {
      *
      * @param basePath      基础path
      * @param table         table
-     * @param configuration 配置文件
      */
-    private void createTableModel(String basePath, Table table, TableConfiguration configuration) {
+    private void createTableModel(String basePath, Table table) {
         File file = new File(basePath);
         logger.info(file.getAbsolutePath());
         //不存在时创建文件
@@ -58,7 +57,7 @@ public class ModelFactory implements AbstractFactory {
         }
         Clazz clazz = new Clazz();
         clazz.setClassName(table.getClazzName());
-        clazz.setPackageName(this.configuration.getModel());
+        clazz.setPackageName(this.configuration.getPackages().getMapper().getName());
         clazz.setColumnList(table.getColumns());
         List<String> importClazz = new ArrayList<>();
         for (int i = 0; i < table.getColumns().size(); i++) {
@@ -81,7 +80,7 @@ public class ModelFactory implements AbstractFactory {
         }
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-           // logger.info(clazz.toString());
+            // logger.info(clazz.toString());
             writer.append(clazz.toString());
             writer.flush();
             writer.close();

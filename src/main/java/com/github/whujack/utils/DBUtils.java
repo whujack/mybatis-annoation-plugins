@@ -2,6 +2,7 @@ package com.github.whujack.utils;
 
 
 import com.github.whujack.config.Configuration;
+import com.github.whujack.config.DataBaseConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +22,6 @@ public class DBUtils {
      * @param username 用户名
      * @param password 密码
      * @return 数据库连接
-     * @throws Exception 异常
      */
     public static Connection getConnection(String driver, String url, String username, String password) {
         Connection connection = null;
@@ -42,8 +42,8 @@ public class DBUtils {
      * @param sql           sql语句
      * @return 返回结果集
      */
-    public static ResultSet execute(Configuration configuration, String sql) {
-        Connection connection = getConnection(configuration.getDriver(), configuration.getUrl(), configuration.getUsername(), configuration.getPassword());
+    public static ResultSet execute(DataBaseConfiguration  configuration, String sql) {
+        Connection connection = getConnection(configuration.getDriver(), configuration.getUri(), configuration.getUsername(), configuration.getPassword());
         if (connection == null) {
             logger.error("获取数据库连接失败，请检查配置文件！");
             System.exit(1);
