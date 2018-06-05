@@ -96,4 +96,13 @@ public class Clazz {
         this.importClazz = importClazz;
         return this;
     }
+
+    public List<String> getMethodList() {
+        return methodList;
+    }
+
+    public Clazz setMethodList(List<String> methodList) {
+        this.methodList = methodList;
+        return this;
+    }
 }

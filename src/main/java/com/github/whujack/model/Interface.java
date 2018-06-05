@@ -10,7 +10,7 @@ public class Interface {
     private List<String> importPackage;
     private String name;
     private List<String> methodList;
-
+    private Clazz sqlProvider;
 
     @Override
     public String toString() {
@@ -25,6 +25,10 @@ public class Interface {
             builder.append("\n\t" + methodList.get(i));
         }
         builder.append("\n}");
+
+        if(sqlProvider!=null){
+            builder.append(sqlProvider.toString());
+        }
 
         return builder.toString();
     }
@@ -62,6 +66,15 @@ public class Interface {
 
     public Interface setMethodList(List<String> methodList) {
         this.methodList = methodList;
+        return this;
+    }
+
+    public Clazz getSqlProvider() {
+        return sqlProvider;
+    }
+
+    public Interface setSqlProvider(Clazz sqlProvider) {
+        this.sqlProvider = sqlProvider;
         return this;
     }
 }

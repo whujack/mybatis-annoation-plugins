@@ -2,6 +2,7 @@ package com.github.whujack.factory;
 
 import com.github.whujack.config.Configuration;
 import com.github.whujack.constant.GlobalConstant;
+import com.github.whujack.model.Clazz;
 import com.github.whujack.model.Interface;
 import com.github.whujack.model.Table;
 import com.github.whujack.utils.StringUtils;
@@ -12,6 +13,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,6 +60,9 @@ public class DaoFactory implements AbstractFactory {
         Interface inter = new Interface();
         inter.setName(name);
         inter.setPackageName(configuration.getPackages().getDao().getName());
+        Clazz sqlProvider=new Clazz();
+        sqlProvider.setClassName("SqlProvider");
+        List<String> methodList=new ArrayList<>();
         BufferedWriter writer = null;
         try {
             writer = new BufferedWriter(new FileWriter(file));
