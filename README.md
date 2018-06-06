@@ -30,7 +30,7 @@ mybatis-annotation-plugins是一款mybatis注解生成工具，主要用于产�
 
 ## 3.添加配置文件
 ```$xslt
-在resource文件目录下创建mybatis-annotation-config.yml,文件内容如下
+在resource文件目录下创建mybatis-annotation-config.yml,文件内容如下:
 database:
  driver: com.mysql.jdbc.Driver                      #数据库驱动
  uri: jdbc:mysql://10.10.87.56:3306/focus_sale_dev  #数据库地址
@@ -54,3 +54,8 @@ tableConfigurations:
  - name: example_table_2 
    enableSelect: true
 ```
+
+## 4.执行插件
+找到maven插件并执行mybatis-annotation-plugins中generator
+
+  
