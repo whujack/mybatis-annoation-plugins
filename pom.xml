@@ -4,7 +4,7 @@
     <groupId>com.github.whujack</groupId>
     <artifactId>mybatis-annotation-plugins</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>1.1</version>
+    <version>1.2</version>
     <description>generator mybatis file</description>
     <name>com.github.whujack:mybatis-annotation-plugins</name>
     <url>https://github.com/whujack/mybatis-annoation-plugins</url>
@@ -18,7 +18,7 @@
         <connection>scm:git:https://github.com/whujack/mybatis-annoation-plugins.git</connection>
         <developerConnection>scm:git:https://github.com/whujack/mybatis-annoation-plugins.git</developerConnection>
         <url>https://github.com/whujack/mybatis-annoation-plugins.git</url>
-        <tag>1.1</tag>
+        <tag>1.2</tag>
     </scm>
     <distributionManagement>
         <snapshotRepository>
@@ -143,7 +143,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <verion>1.6</verion>
+                <version>1.6</version>
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>

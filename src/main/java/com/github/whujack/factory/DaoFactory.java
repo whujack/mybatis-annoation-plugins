@@ -60,9 +60,38 @@ public class DaoFactory implements AbstractFactory {
         Interface inter = new Interface();
         inter.setName(name);
         inter.setPackageName(configuration.getPackages().getDao().getName());
-        Clazz sqlProvider=new Clazz();
+        List<String> importList = new ArrayList<>();
+        importList.add("org.apache.ibatis.annotations.ResultMap");
+        importList.add("org.apache.ibatis.annotations.SelectProvider");
+        importList.add("org.apache.ibatis.annotations.Param");
+        importList.add(configuration.getPackages().getModel().getName() + "." + table.getClazzName());
+        Clazz sqlProvider = new Clazz();
         sqlProvider.setClassName("SqlProvider");
-        List<String> methodList=new ArrayList<>();
+        sqlProvider.setClassType(null);
+        List<String> interMethodList = new ArrayList<>();
+        List<String> providerMethodList = new ArrayList<>();
+        if (table.getTableConfiguration().getEnableSelect()) {
+            String method = "@SelectProvider(type = SqlProvider.class, method = \"selectBy"+table.getClazzName()+"\")\n" +
+                    "\t@ResultMap(\"BaseResultMap\")\n\tList<" + table.getClazzName() +
+                    "> selectBy"+table.getClazzName()+"(@Param(\"" + StringUtils.toCamelCase(table.getName()) + "\")" + table.getClazzName() + " " + StringUtils.toCamelCase(table.getName()) + ");";
+            interMethodList.add(method);
+            String sqlMethod = "\tpublic String selectBy" + table.getClazzName() + "(" + table.getClazzName() + " " + StringUtils.toCamelCase(table.getName()) + "){\n" +
+                    "\t\tString sql=\"SELECT * FROM " + table.getName() + " WHERE 1=1\";\n";
+            String objectName=StringUtils.toCamelCase(table.getName());
+            for (Table.Column column : table.getColumns()) {
+                if(column.getName()!=null) {
+                    sqlMethod += "\t\tif(" + objectName + "." + StringUtils.toGetterName(column.getName()) + "()!=null) sql+=\"AND "
+                            + column.getName() + "=\"+" + objectName + "." + StringUtils.toGetterName(column.getName()) + "();\n";
+                }
+            }
+            sqlMethod += "\n\t\treturn sql;\n\t}\n";
+            providerMethodList.add(sqlMethod);
+            importList.add("java.util.List");
+        }
+        inter.setImportPackage(importList);
+        sqlProvider.setMethodList(providerMethodList);
+        inter.setMethodList(interMethodList);
+        inter.setSqlProvider(sqlProvider);
         BufferedWriter writer = null;
         try {
             writer = new BufferedWriter(new FileWriter(file));

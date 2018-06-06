@@ -1,7 +1,10 @@
 package com.github.whujack.model;
 
+import com.github.whujack.factory.DaoFactory;
 import com.github.whujack.syntax.SQLAnalyze;
 import com.github.whujack.utils.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +13,9 @@ import java.util.List;
  * @author Created By LiJie at 2018/3/19
  */
 public class Clazz {
+    private static final Logger logger = LoggerFactory.getLogger(Clazz.class);
     private String packageName;
+    private String classType = "public";
     private String className;
     private List<String> importClazz;
     private List<Table.Column> columnList;
@@ -19,19 +24,27 @@ public class Clazz {
     @Override
     public String toString() {
         StringBuffer clazzBuff = new StringBuffer();
-        clazzBuff.append("package " + packageName + ";\n\n");
+        if (packageName != null) {
+            clazzBuff.append("package " + packageName + ";\n\n");
+        }
         for (int i = 0; importClazz != null && i < importClazz.size(); i++) {
             clazzBuff.append("import " + importClazz.get(i) + ";\n");
         }
         clazzBuff.append("\n");
         //设置class
-        clazzBuff.append("public class " + className + "{\n");
+        if (classType != null && !classType.equals("")) {
+            clazzBuff.append(classType);
+        }
+        clazzBuff.append(" class " + className + "{\n");
 
 
-        methodList = new ArrayList<>();
+        if(methodList==null) {
+            methodList = new ArrayList<>();
+        }
         //设置field
         for (int i = 0; columnList != null && i < columnList.size(); i++) {
             Table.Column column = columnList.get(i);
+            logger.info("{}   {}",column.getName(),column.getType());
             if (column.getName() != null && column.getType() != null) {
                 clazzBuff.append("\t");
                 String fieldName = StringUtils.toCamelCase(column.getName());
@@ -52,11 +65,11 @@ public class Clazz {
         StringBuilder builder = new StringBuilder();
         //field getter
         builder.append("\tpublic " + type.getName() + " get" + StringUtils.firstToUpper(name) + "(){\n");
-        builder.append("\t\t" + "return this." + name+";");
+        builder.append("\t\t" + "return this." + name + ";");
         builder.append("\n\t}\n\n");
         //field setter
         builder.append("\tpublic void set" + StringUtils.firstToUpper(name) + "(" + type.getName() + " " + name + "){\n");
-        builder.append("\t\tthis." + name + "=" + name+";");
+        builder.append("\t\tthis." + name + "=" + name + ";");
         builder.append("\n\t}\n\n");
         return builder.toString();
     }
@@ -103,6 +116,15 @@ public class Clazz {
 
     public Clazz setMethodList(List<String> methodList) {
         this.methodList = methodList;
+        return this;
+    }
+
+    public String getClassType() {
+        return classType;
+    }
+
+    public Clazz setClassType(String classType) {
+        this.classType = classType;
         return this;
     }
 }

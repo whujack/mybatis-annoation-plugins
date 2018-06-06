@@ -15,20 +15,22 @@ public class Interface {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("package " + packageName+";\n\n");
+        builder.append("package " + packageName + ";\n\n");
         for (int i = 0; importPackage != null && i < importPackage.size(); i++) {
-            builder.append("\n" + importPackage.get(i)+";");
+            builder.append("\nimport " + importPackage.get(i) + ";");
         }
-        //builder.append("\nimport org.apache.ibatis.annotations.*;\n");
+        builder.append("\n");
         builder.append("\npublic interface " + name + "{\n");
-        for (int i = 0; methodList != null; i++) {
+        for (int i = 0; methodList != null && i < methodList.size(); i++) {
             builder.append("\n\t" + methodList.get(i));
         }
-        builder.append("\n}");
-
-        if(sqlProvider!=null){
-            builder.append(sqlProvider.toString());
+        builder.append("\n");
+        if (sqlProvider != null) {
+            builder.append("\n");
+            String classStr = sqlProvider.toString();
+            builder.append(classStr.replaceAll("\n", "\n\t"));
         }
+        builder.append("\n}");
 
         return builder.toString();
     }

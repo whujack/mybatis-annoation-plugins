@@ -99,7 +99,7 @@ public class SQLAnalyze {
         if (sql.contains("bigint")) {
             return Type.Long;
         }
-        if (sql.contains("varchar")) {
+        if (sql.contains("varchar")||sql.contains("text")) {
             return Type.String;
         }
         if (sql.contains("timestamp") || sql.contains("date")) {

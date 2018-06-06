@@ -57,7 +57,7 @@ public class ModelFactory implements AbstractFactory {
         }
         Clazz clazz = new Clazz();
         clazz.setClassName(table.getClazzName());
-        clazz.setPackageName(this.configuration.getPackages().getMapper().getName());
+        clazz.setPackageName(this.configuration.getPackages().getModel().getName());
         clazz.setColumnList(table.getColumns());
         List<String> importClazz = new ArrayList<>();
         for (int i = 0; i < table.getColumns().size(); i++) {

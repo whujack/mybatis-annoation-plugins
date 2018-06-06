@@ -63,6 +63,26 @@ public class StringUtils {
         return name.substring(0, 1).toUpperCase() + name.substring(1);
     }
 
+    /**
+     * 获取setter name
+     *
+     * @param name 名称
+     * @return 返回settername
+     */
+    public static String toSetterName(String name) {
+        return "set" + firstToUpper(toCamelCase(name));
+    }
+
+    /**
+     * 获取setter name
+     *
+     * @param name 名称
+     * @return toGetterName
+     */
+    public static String toGetterName(String name) {
+        return "get" + firstToUpper(toCamelCase(name));
+    }
+
     public static void main(String[] args) {
         //String res = replace("#{}#{}#{}#1234", "a", "b", "c");
         String res = "sale_abc_afd_";
