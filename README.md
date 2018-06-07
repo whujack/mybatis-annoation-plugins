@@ -24,7 +24,7 @@ mybatis-annotation-plugins是一款mybatis注解生成工具，主要用于产�
 <plugin>
     <groupId>edu.whu</groupId>
     <artifactId>mybatis-annotation-plugins</artifactId>
-    <version>1.2</version>
+    <version>1.4</version>
 </plugin>
 ```
 
@@ -50,7 +50,10 @@ packages:
 
 tableConfigurations:
  - name: example_table_1                            #table名称
-   enableSelect: true                               #是否生成select sql,其他sql有待更新
+   enableSelect: true                               #是否生成select sql,其他sql有待更新 可选填写（true|false）
+   enableInsert: true   
+   enableUpdate: true   
+   enableDelete: true   
  - name: example_table_2 
    enableSelect: true
 ```
