@@ -80,7 +80,7 @@ public class DaoFactory implements AbstractFactory {
             String objectName=StringUtils.toCamelCase(table.getName());
             for (Table.Column column : table.getColumns()) {
                 if(column.getName()!=null) {
-                    sqlMethod += "\t\tif(" + objectName + "." + StringUtils.toGetterName(column.getName()) + "()!=null) sql+=\"AND "
+                    sqlMethod += "\t\tif(" + objectName + "." + StringUtils.toGetterName(column.getName()) + "()!=null) sql+=\" AND "
                             + column.getName() + "=\"+" + objectName + "." + StringUtils.toGetterName(column.getName()) + "();\n";
                 }
             }
