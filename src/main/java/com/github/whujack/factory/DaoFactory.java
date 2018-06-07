@@ -5,6 +5,7 @@ import com.github.whujack.constant.GlobalConstant;
 import com.github.whujack.model.Clazz;
 import com.github.whujack.model.Interface;
 import com.github.whujack.model.Table;
+import com.github.whujack.syntax.SQLAnalyze;
 import com.github.whujack.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,9 +62,8 @@ public class DaoFactory implements AbstractFactory {
         inter.setName(name);
         inter.setPackageName(configuration.getPackages().getDao().getName());
         List<String> importList = new ArrayList<>();
-        importList.add("org.apache.ibatis.annotations.ResultMap");
-        importList.add("org.apache.ibatis.annotations.SelectProvider");
-        importList.add("org.apache.ibatis.annotations.Param");
+        importList.add("org.apache.ibatis.annotations.*");
+        importList.add("org.apache.ibatis.jdbc.SQL");
         importList.add(configuration.getPackages().getModel().getName() + "." + table.getClazzName());
         Clazz sqlProvider = new Clazz();
         sqlProvider.setClassName("SqlProvider");
@@ -71,23 +71,102 @@ public class DaoFactory implements AbstractFactory {
         List<String> interMethodList = new ArrayList<>();
         List<String> providerMethodList = new ArrayList<>();
         if (table.getTableConfiguration().getEnableSelect()) {
-            String method = "@SelectProvider(type = SqlProvider.class, method = \"selectBy"+table.getClazzName()+"\")\n" +
+            String method = "@SelectProvider(type = SqlProvider.class, method = \"selectBy" + table.getClazzName() + "\")\n" +
                     "\t@ResultMap(\"BaseResultMap\")\n\tList<" + table.getClazzName() +
-                    "> selectBy"+table.getClazzName()+"(@Param(\"" + StringUtils.toCamelCase(table.getName()) + "\")" + table.getClazzName() + " " + StringUtils.toCamelCase(table.getName()) + ");";
+                    "> selectBy" + table.getClazzName() + "(" + table.getClazzName() + " " + StringUtils.toCamelCase(table.getName()) + ");\n";
             interMethodList.add(method);
+
+
             String sqlMethod = "\tpublic String selectBy" + table.getClazzName() + "(" + table.getClazzName() + " " + StringUtils.toCamelCase(table.getName()) + "){\n" +
-                    "\t\tString sql=\"SELECT * FROM " + table.getName() + " WHERE 1=1\";\n";
-            String objectName=StringUtils.toCamelCase(table.getName());
+                    "\t\tSQL sql= new SQL().SELECT(\"*\").FROM(\"`" + table.getName() + "`\");\n";
+            String objectName = StringUtils.toCamelCase(table.getName());
             for (Table.Column column : table.getColumns()) {
-                if(column.getName()!=null) {
-                    sqlMethod += "\t\tif(" + objectName + "." + StringUtils.toGetterName(column.getName()) + "()!=null) sql+=\" AND "
-                            + column.getName() + "=\"+" + objectName + "." + StringUtils.toGetterName(column.getName()) + "();\n";
+                if (column.getName() != null) {
+                    if (column.getType()!=null&&column.getType() == SQLAnalyze.Type.String) {
+                        sqlMethod += "\t\tif(" + objectName + "." + StringUtils.toGetterName(column.getName()) + "()!=null) sql.AND().WHERE(\"`"
+                                + column.getName() + "`='\"+" + objectName + "." + StringUtils.toGetterName(column.getName()) + "()+\"'\");\n";
+                    }else{
+                        sqlMethod += "\t\tif(" + objectName + "." + StringUtils.toGetterName(column.getName()) + "()!=null) sql.AND().WHERE(\"`"
+                                + column.getName() + "`=\"+" + objectName + "." + StringUtils.toGetterName(column.getName()) + "());\n";
+                    }
                 }
             }
-            sqlMethod += "\n\t\treturn sql;\n\t}\n";
+            sqlMethod += "\n\t\treturn sql.toString();\n\t}\n";
             providerMethodList.add(sqlMethod);
             importList.add("java.util.List");
         }
+        if (table.getTableConfiguration().getEnableInsert() != null && table.getTableConfiguration().getEnableInsert()) {
+            String method = "@InsertProvider(type = SqlProvider.class,method = \"insert" + table.getClazzName() + "\")\n"
+                    + "\tint insert" + table.getClazzName() + "("
+                    + table.getClazzName() + " " + StringUtils.toCamelCase(table.getName()) + ");\n";
+            interMethodList.add(method);
+
+            String sqlMethod = "\tpublic String insert" + table.getClazzName() + "(" + table.getClazzName() + " " + StringUtils.toCamelCase(table.getName()) + "){\n"
+                    + "\t\tSQL sql= new SQL().INSERT_INTO(\"`" + table.getName() + "`\");\n";
+            String objectName = StringUtils.toCamelCase(table.getName());
+            for (Table.Column column : table.getColumns()) {
+                if (column.getName() != null) {
+                    if(column.getType()!=null&&column.getType()== SQLAnalyze.Type.String){
+                        sqlMethod += "\t\tif(" + objectName + "." + StringUtils.toGetterName(column.getName()) + "()!=null) sql.VALUES(\"`" + column.getName() + "`\","
+                                + "\"'\"+" + objectName + "." + StringUtils.toGetterName(column.getName()) + "()+\"'\");\n";
+                    }else {
+                        sqlMethod += "\t\tif(" + objectName + "." + StringUtils.toGetterName(column.getName()) + "()!=null) sql.VALUES(\"`" + column.getName() + "`\","
+                                + "String.valueOf(" + objectName + "." + StringUtils.toGetterName(column.getName()) + "()));\n";
+                    }
+                }
+            }
+            sqlMethod += "\t\treturn sql.toString();\t\n\t}\n";
+            providerMethodList.add(sqlMethod);
+        }
+        if (table.getTableConfiguration().getEnableUpdate() != null && table.getTableConfiguration().getEnableUpdate()) {
+            String method = "@UpdateProvider(type = SqlProvider.class,method = \"update" + table.getClazzName() + "\")\n"
+                    + "\tint update" + table.getClazzName() + "("
+                    + table.getClazzName() + " " + StringUtils.toCamelCase(table.getName()) + ");\n";
+            interMethodList.add(method);
+
+            String sqlMethod = "\tpublic String update" + table.getClazzName() + "(" + table.getClazzName() + " " + StringUtils.toCamelCase(table.getName()) + "){\n"
+                    + "\t\tSQL sql= new SQL().UPDATE(\"`" + table.getName() + "`\");\n";
+            String objectName = StringUtils.toCamelCase(table.getName());
+            for (Table.Column column : table.getColumns()) {
+                if (column.getName() != null) {
+                    if(column.getType()!=null&&column.getType()== SQLAnalyze.Type.String){
+                        sqlMethod += "\t\tif(" + objectName + "." + StringUtils.toGetterName(column.getName()) + "()!=null) sql.SET(\"`" + column.getName() + "`='\" + "
+                                + objectName + "." + StringUtils.toGetterName(column.getName()) + "()+\"'\");\n";
+                    }else {
+                        sqlMethod += "\t\tif(" + objectName + "." + StringUtils.toGetterName(column.getName()) + "()!=null) sql.SET(\"`" + column.getName() + "`=\" + "
+                                + objectName + "." + StringUtils.toGetterName(column.getName()) + "());\n";
+                    }
+                }
+            }
+            sqlMethod += "\t\tsql.WHERE(\"`" + table.getPrimaryKey().getName() + "`=\"+" + objectName + "." + StringUtils.toGetterName(table.getPrimaryKey().getName()) + "());\n";
+            sqlMethod += "\t\treturn sql.toString();\t\n\t}\n";
+            providerMethodList.add(sqlMethod);
+        }
+        if (table.getTableConfiguration().getEnableDelete() != null && table.getTableConfiguration().getEnableDelete()) {
+            String method = "@DeleteProvider(type = SqlProvider.class,method = \"delete" + table.getClazzName() + "\")\n"
+                    + "\tint delete" + table.getClazzName() + "("
+                    + table.getClazzName() + " " + StringUtils.toCamelCase(table.getName()) + ");\n";
+            interMethodList.add(method);
+
+            String sqlMethod = "\tpublic String delete" + table.getClazzName() + "(" + table.getClazzName() + " " + StringUtils.toCamelCase(table.getName()) + "){\n"
+                    + "\t\tSQL sql= new SQL().DELETE_FROM(\"`" + table.getName() + "`\");\n";
+            String objectName = StringUtils.toCamelCase(table.getName());
+            for (Table.Column column : table.getColumns()) {
+                if (column.getName() != null) {
+                    if(column.getType()!=null&&column.getType()== SQLAnalyze.Type.String) {
+                        sqlMethod += "\t\tif(" + objectName + "." + StringUtils.toGetterName(column.getName()) + "()!=null) sql.AND().WHERE(\"`" + column.getName() + "`='\" + "
+                                + objectName + "." + StringUtils.toGetterName(column.getName()) + "()+\"'\");\n";
+                    }else {
+                        sqlMethod += "\t\tif(" + objectName + "." + StringUtils.toGetterName(column.getName()) + "()!=null) sql.AND().WHERE(\"`" + column.getName() + "`=\" + "
+                                + objectName + "." + StringUtils.toGetterName(column.getName()) + "());\n";
+                    }
+                }
+            }
+            sqlMethod += "\t\treturn sql.toString();\t\n\t}\n";
+            providerMethodList.add(sqlMethod);
+        }
+
+
         inter.setImportPackage(importList);
         sqlProvider.setMethodList(providerMethodList);
         inter.setMethodList(interMethodList);
